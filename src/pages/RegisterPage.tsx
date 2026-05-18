@@ -54,6 +54,7 @@ export default function RegisterPage() {
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <Input
               label="Email"
+              labelClassName="text-slate-300"
               type="email"
               placeholder="you@example.com"
               error={errors.email?.message}
@@ -61,12 +62,14 @@ export default function RegisterPage() {
             />
             <Input
               label="Ім'я користувача"
+              labelClassName="text-slate-300"
               placeholder="username"
               error={errors.username?.message}
               {...register('username')}
             />
             <Input
               label="Пароль"
+              labelClassName="text-slate-300"
               type="password"
               placeholder="••••••••"
               error={errors.password?.message}
@@ -74,6 +77,7 @@ export default function RegisterPage() {
             />
             <Input
               label="Підтвердити пароль"
+              labelClassName="text-slate-300"
               type="password"
               placeholder="••••••••"
               error={errors.confirmPassword?.message}

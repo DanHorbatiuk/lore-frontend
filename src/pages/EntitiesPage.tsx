@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import toast from 'react-hot-toast';
 import { Plus, Search, Edit, Trash2, Image, Clock, X } from 'lucide-react';
-import { entitiesApi } from '@/api/entities';
+import { entitiesApi, resolveImageUrl } from '@/api/entities';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
@@ -111,7 +111,7 @@ function EntityCard({ entity, onEdit, onDelete }: { entity: Entity; onEdit: () =
       onClick={() => navigate(`/worlds/${worldId}/entities/${entity.id}`)}
     >
       {entity.image_url && (
-        <img src={entity.image_url} alt={entity.name} className="w-full h-24 object-cover rounded-lg" />
+        <img src={resolveImageUrl(entity.image_url)!} alt={entity.name} className="w-full h-24 object-cover rounded-lg" />
       )}
       <div>
         <div className="flex items-start justify-between gap-2">
