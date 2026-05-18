@@ -44,8 +44,22 @@ export default function LoginPage() {
         <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8">
           <h2 className="text-xl font-bold text-white mb-6">Вхід в акаунт</h2>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <Input label="Email" type="email" placeholder="you@example.com" error={errors.email?.message} {...register('email')} />
-            <Input label="Пароль" type="password" placeholder="••••••••" error={errors.password?.message} {...register('password')} />
+            <Input
+              label="Email"
+              labelClassName="text-slate-200"
+              type="email"
+              placeholder="you@example.com"
+              error={errors.email?.message}
+              {...register('email')}
+            />
+            <Input
+              label="Пароль"
+              labelClassName="text-slate-200"
+              type="password"
+              placeholder="••••••••"
+              error={errors.password?.message}
+              {...register('password')}
+            />
             <Button type="submit" className="w-full justify-center mt-2" isLoading={isSubmitting}>Увійти</Button>
           </form>
           <p className="mt-5 text-center text-sm text-slate-500">
