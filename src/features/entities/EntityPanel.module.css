@@ -1,0 +1,81 @@
+.panel {
+  width: 0;
+  flex-shrink: 0;
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: width var(--dur);
+}
+.panel.open { width: 300px; }
+.header {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.close {
+  margin-left: auto;
+  width: 24px; height: 24px;
+  border-radius: var(--r-sm);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-3);
+  font-size: 18px;
+  cursor: pointer;
+  transition: all var(--dur);
+}
+.close:hover { color: var(--text); background: var(--surface2); }
+.body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.name {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 1.3;
+  margin-bottom: 8px;
+}
+.desc {
+  font-size: 13px;
+  color: var(--text-2);
+  line-height: 1.6;
+  font-family: var(--font-serif);
+  font-style: italic;
+  margin-bottom: 16px;
+}
+.sectionTitle {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-3);
+  margin: 12px 0 8px;
+}
+.props { display: flex; flex-direction: column; gap: 6px; }
+.prop { display: flex; justify-content: space-between; font-size: 12px; }
+.propKey { color: var(--text-3); }
+.propVal { color: var(--text-2); font-family: var(--font-mono); font-size: 11px; }
+.connections { display: flex; flex-direction: column; gap: 6px; }
+.conn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: var(--r-md);
+  background: var(--surface2);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all var(--dur);
+}
+.conn:hover { background: var(--surface3); }
+.connDot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.connLabel { color: var(--text-3); font-size: 11px; }
+.connName { color: var(--text-2); }
+.actions { margin-top: auto; padding-top: 16px; }

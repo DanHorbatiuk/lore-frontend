@@ -1,0 +1,86 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-family: var(--font-ui);
+  font-weight: 400;
+  border-radius: var(--r-md);
+  cursor: pointer;
+  transition: all var(--dur);
+  border: none;
+}
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.btn-primary  { background: var(--primary); color: #fff; }
+.btn-primary:hover:not(:disabled) { opacity: 0.88; }
+
+.btn-accent   { background: var(--accent); color: #fff; }
+.btn-accent:hover:not(:disabled) { opacity: 0.88; }
+
+.btn-ghost    { background: transparent; color: var(--text-2); border: 1px solid var(--border); }
+.btn-ghost:hover:not(:disabled) { border-color: var(--border2); color: var(--text); }
+
+.btn-danger   { background: rgba(224,72,72,0.12); color: var(--danger); border: 1px solid rgba(224,72,72,0.2); }
+.btn-danger:hover:not(:disabled) { background: rgba(224,72,72,0.2); }
+
+.btn-sm  { padding: 6px 12px; font-size: 12px; }
+.btn-md  { padding: 9px 18px; font-size: 14px; }
+.btn-lg  { padding: 12px 24px; font-size: 15px; }
+
+.field { display: flex; flex-direction: column; gap: 5px; }
+.label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-3);
+}
+
+.overlay {
+  position: fixed; inset: 0; z-index: 100;
+  background: rgba(12, 12, 24, 0.82);
+  display: flex; align-items: center; justify-content: center;
+  backdrop-filter: blur(2px);
+}
+.modal {
+  width: 460px;
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: var(--r-xl);
+  padding: 28px;
+}
+.modal-title {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-weight: 400;
+  margin-bottom: 20px;
+}
+
+.badge {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 20px;
+  border: 1px solid;
+}
+
+.spinner {
+  width: 20px; height: 20px;
+  border: 2px solid var(--border2);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.empty {
+  flex: 1;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 12px; color: var(--text-3);
+  padding: 40px;
+}
+.empty-icon { opacity: 0.3; }
+.empty-text { font-family: var(--font-serif); font-style: italic; font-size: 16px; }

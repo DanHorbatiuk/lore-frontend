@@ -1,0 +1,59 @@
+.page {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ink);
+  background-image: radial-gradient(ellipse 70% 55% at 50% -5%, rgba(108,99,213,0.2) 0%, transparent 70%);
+}
+.card {
+  width: 380px;
+  padding: 40px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+}
+.logoRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+.logoText {
+  font-family: var(--font-serif);
+  font-size: 28px;
+  font-weight: 300;
+  letter-spacing: 0.3px;
+}
+.tagline {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--text-3);
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+.tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 24px;
+}
+.tab {
+  flex: 1;
+  padding: 8px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-3);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: all var(--dur);
+  background: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+}
+.tab.active { color: var(--primary-l); border-bottom-color: var(--primary); }
+.form { display: flex; flex-direction: column; gap: 14px; }
+.field { display: flex; flex-direction: column; gap: 5px; }
+.label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-3); }
