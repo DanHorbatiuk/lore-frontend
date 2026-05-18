@@ -34,16 +34,20 @@ export default function LandingPage() {
           <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-blue-900/20 blur-3xl" />
           <div className="absolute top-1/2 left-1/4 w-[300px] h-[300px] rounded-full bg-indigo-900/15 blur-3xl" />
         </div>
+
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-900/40 border border-blue-700/40 text-blue-300 text-xs font-medium mb-6 tracking-wide">
           <Sparkles size={12} />
           Платформа для world-building
         </div>
+
         <h1 className="text-5xl sm:text-7xl font-black tracking-tight mb-6 bg-gradient-to-b from-white via-slate-200 to-slate-400 bg-clip-text text-transparent leading-tight">
           Твій світ.<br />Твоя легенда.
         </h1>
+
         <p className="text-lg text-slate-400 max-w-xl mb-10 leading-relaxed">
           LORE — це простір для творців: будуй всесвіти, керуй персонажами, відстежуй зв'язки та ділись своїм світом з командою.
         </p>
+
         <div className="flex flex-col sm:flex-row gap-3">
           <Link
             to="/register"
@@ -67,12 +71,39 @@ export default function LandingPage() {
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {[
-            { icon: <Scroll size={22} />, title: 'Entities', desc: 'Персонажі, локації, події, фракції — структуруй кожен елемент свого світу.', color: 'text-amber-400', bg: 'bg-amber-900/20 border-amber-800/30' },
-            { icon: <Network size={22} />, title: "Граф зв'язків", desc: 'Візуалізуй відносини між елементами у вигляді інтерактивного графу.', color: 'text-blue-400', bg: 'bg-blue-900/20 border-blue-800/30' },
-            { icon: <Users size={22} />, title: 'Співпраця', desc: 'Запрошуй авторів, редакторів і глядачів — разом будуйте більші всесвіти.', color: 'text-purple-400', bg: 'bg-purple-900/20 border-purple-800/30' },
-            { icon: <BarChart2 size={22} />, title: 'Аналітика', desc: "Відстежуй активність, найпов'язаніші вузли та розвиток свого світу.", color: 'text-emerald-400', bg: 'bg-emerald-900/20 border-emerald-800/30' },
+            {
+              icon: <Scroll size={22} />,
+              title: 'Entities',
+              desc: 'Персонажі, локації, події, фракції — структуруй кожен елемент свого світу.',
+              color: 'text-amber-400',
+              bg: 'bg-amber-900/20 border-amber-800/30',
+            },
+            {
+              icon: <Network size={22} />,
+              title: 'Граф зв\'язків',
+              desc: 'Візуалізуй відносини між елементами у вигляді інтерактивного графу.',
+              color: 'text-blue-400',
+              bg: 'bg-blue-900/20 border-blue-800/30',
+            },
+            {
+              icon: <Users size={22} />,
+              title: 'Співпраця',
+              desc: 'Запрошуй авторів, редакторів і глядачів — разом будуйте більші всесвіти.',
+              color: 'text-purple-400',
+              bg: 'bg-purple-900/20 border-purple-800/30',
+            },
+            {
+              icon: <BarChart2 size={22} />,
+              title: 'Аналітика',
+              desc: 'Відстежуй активність, найпов\'язаніші вузли та розвиток свого світу.',
+              color: 'text-emerald-400',
+              bg: 'bg-emerald-900/20 border-emerald-800/30',
+            },
           ].map((f) => (
-            <div key={f.title} className={`rounded-2xl border p-6 flex flex-col gap-3 ${f.bg}`}>
+            <div
+              key={f.title}
+              className={`rounded-2xl border p-6 flex flex-col gap-3 ${f.bg}`}
+            >
               <div className={f.color}>{f.icon}</div>
               <h3 className="font-semibold text-slate-100">{f.title}</h3>
               <p className="text-sm text-slate-400 leading-relaxed">{f.desc}</p>
@@ -86,13 +117,19 @@ export default function LandingPage() {
         <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-12">
           <Globe size={40} className="mx-auto text-blue-400 mb-4" />
           <h2 className="text-3xl font-bold mb-3 text-white">Готовий почати?</h2>
-          <p className="text-slate-400 mb-8">Реєстрація безкоштовна. Твій перший всесвіт чекає.</p>
-          <Link to="/register" className="inline-block px-10 py-3 bg-blue-600 hover:bg-blue-500 rounded-xl font-semibold text-base transition-colors">
+          <p className="text-slate-400 mb-8">
+            Реєстрація безкоштовна. Твій перший всесвіт чекає.
+          </p>
+          <Link
+            to="/register"
+            className="inline-block px-10 py-3 bg-blue-600 hover:bg-blue-500 rounded-xl font-semibold text-base transition-colors"
+          >
             Створити акаунт
           </Link>
         </div>
       </section>
 
+      {/* Footer */}
       <footer className="border-t border-slate-800 py-6 text-center text-sm text-slate-500">
         LORE — World-building platform
       </footer>
