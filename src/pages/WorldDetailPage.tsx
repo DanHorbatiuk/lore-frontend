@@ -2,6 +2,7 @@ import { NavLink, Outlet, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { worldsApi } from '@/api/worlds';
 import { cn } from '@/utils/cn';
+import type { World } from '@/types';
 
 export default function WorldDetailPage() {
   const { worldId } = useParams<{ worldId: string }>();
@@ -34,7 +35,7 @@ export default function WorldDetailPage() {
         <NavLink to={`/worlds/${worldId}/stats`} className={tabClass}>Аналітика</NavLink>
       </nav>
       <div className="flex-1 overflow-y-auto">
-        <Outlet />
+        <Outlet context={{ world } satisfies { world: World | undefined }} />
       </div>
     </div>
   );
