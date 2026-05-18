@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -15,6 +15,7 @@ import { Input, Textarea, Select } from '@/components/ui/Input';
 import { getApiError } from '@/utils/errorHandler';
 import { useDebounce } from '@/hooks/useDebounce';
 import type { Entity, EntityType } from '@/types';
+import type { WorldOutletContext } from './WorldDetailPage';
 
 const ENTITY_TYPES: { value: string; label: string }[] = [
   { value: 'character', label: 'Персонаж' },
@@ -101,7 +102,14 @@ function EntityFormModal({
   );
 }
 
-function EntityCard({ entity, onEdit, onDelete }: { entity: Entity; onEdit: () => void; onDelete: () => void }) {
+function EntityCard({
+  entity, canEdit, onEdit, onDelete,
+}: {
+  entity: Entity;
+  canEdit: boolean;
+  onEdit: () => void;
+  onDelete: () => void;
+}) {
   const navigate = useNavigate();
   const { worldId } = useParams<{ worldId: string }>();
 
@@ -125,27 +133,31 @@ function EntityCard({ entity, onEdit, onDelete }: { entity: Entity; onEdit: () =
           <Clock size={12} /> {entity.timeline_position}
         </div>
       )}
-      <div className="flex gap-2 mt-auto pt-2 border-t border-slate-50">
-        <Button
-          size="sm" variant="secondary"
-          onClick={(e) => { e.stopPropagation(); onEdit(); }}
-        >
-          <Edit size={12} /> Редагувати
-        </Button>
-        <Button
-          size="sm" variant="ghost"
-          onClick={(e) => { e.stopPropagation(); onDelete(); }}
-          className="text-red-500 hover:bg-red-50"
-        >
-          <Trash2 size={12} />
-        </Button>
-      </div>
+      {canEdit && (
+        <div className="flex gap-2 mt-auto pt-2 border-t border-slate-50">
+          <Button
+            size="sm" variant="secondary"
+            onClick={(e) => { e.stopPropagation(); onEdit(); }}
+          >
+            <Edit size={12} /> Редагувати
+          </Button>
+          <Button
+            size="sm" variant="ghost"
+            onClick={(e) => { e.stopPropagation(); onDelete(); }}
+            className="text-red-500 hover:bg-red-50"
+          >
+            <Trash2 size={12} />
+          </Button>
+        </div>
+      )}
     </Card>
   );
 }
 
 export default function EntitiesPage() {
   const { worldId } = useParams<{ worldId: string }>();
+  const { userRole } = useOutletContext<WorldOutletContext>();
+  const canEdit = userRole !== 'viewer';
   const qc = useQueryClient();
   const [search, setSearch] = useState('');
   const [typeFilter, setTypeFilter] = useState('');
@@ -209,13 +221,13 @@ export default function EntitiesPage() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Пошук entities..."
-            className="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:border-slate-400 bg-white"
           />
         </div>
         <select
           value={typeFilter}
           onChange={(e) => setTypeFilter(e.target.value)}
-          className="rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+          className="rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:border-slate-400 bg-white"
         >
           <option value="">Всі типи</option>
           {ENTITY_TYPES.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
@@ -234,6 +246,7 @@ export default function EntitiesPage() {
             <EntityCard
               key={e.id}
               entity={e}
+              canEdit={canEdit}
               onEdit={() => setEditEntity(e)}
               onDelete={() => { if (confirm(`Видалити "${e.name}"?`)) deleteMutation.mutate(e.id); }}
             />
@@ -241,13 +254,15 @@ export default function EntitiesPage() {
         </div>
       )}
 
-      <button
-        onClick={() => setCreateOpen(true)}
-        className="fixed bottom-6 right-6 w-12 h-12 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg flex items-center justify-center transition-colors"
-        title="Додати entity"
-      >
-        <Plus size={20} />
-      </button>
+      {canEdit && (
+        <button
+          onClick={() => setCreateOpen(true)}
+          className="fixed bottom-6 right-6 w-12 h-12 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg flex items-center justify-center transition-colors"
+          title="Додати entity"
+        >
+          <Plus size={20} />
+        </button>
+      )}
 
       <EntityFormModal
         isOpen={createOpen}

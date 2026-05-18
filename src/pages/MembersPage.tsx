@@ -16,7 +16,8 @@ import { getApiError } from '@/utils/errorHandler';
 import { useAuthStore } from '@/store/authStore';
 import { formatDistanceToNow } from 'date-fns';
 import { uk } from 'date-fns/locale';
-import type { MemberRole, World, WorldMember } from '@/types';
+import type { MemberRole, WorldMember } from '@/types';
+import type { WorldOutletContext } from './WorldDetailPage';
 
 const ROLE_OPTIONS: { value: string; label: string }[] = [
   { value: 'viewer', label: 'Viewer' },
@@ -32,7 +33,7 @@ type InviteFormData = z.infer<typeof inviteSchema>;
 
 export default function MembersPage() {
   const { worldId } = useParams<{ worldId: string }>();
-  const { world } = useOutletContext<{ world: World | undefined }>();
+  const { world, userRole } = useOutletContext<WorldOutletContext>();
   const qc = useQueryClient();
   const currentUser = useAuthStore((s) => s.user);
   const [inviteOpen, setInviteOpen] = useState(false);
@@ -75,9 +76,12 @@ export default function MembersPage() {
     onError: (err) => toast.error(getApiError(err)),
   });
 
-  const isOwner = world?.owner_id === currentUser?.id;
-  const currentMember = members.find((m) => m.user_id === currentUser?.id);
-  const canManage = isOwner || currentMember?.role === 'admin';
+  const isOwner = userRole === 'owner';
+  const canManage = userRole === 'owner' || userRole === 'admin';
+
+  const ownerName = isOwner ? (currentUser?.username ?? world?.owner_id) : world?.owner_id;
+  const ownerEmail = isOwner ? currentUser?.email : undefined;
+  const ownerInitial = String(ownerName ?? '?')[0].toUpperCase();
 
   return (
     <>
@@ -103,16 +107,45 @@ export default function MembersPage() {
             </tr>
           </thead>
           <tbody>
+            {/* Owner row */}
+            <tr className="border-b border-slate-50 bg-amber-50/40">
+              <td className="px-4 py-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-700 text-xs font-bold">
+                    {ownerInitial}
+                  </div>
+                  <div>
+                    <p className="font-medium text-slate-800 flex items-center gap-1.5">
+                      {isOwner ? currentUser?.username : (
+                        <span className="text-slate-500 font-normal text-xs">{String(world?.owner_id ?? '').slice(0, 8)}…</span>
+                      )}
+                      {isOwner && (
+                        <span className="text-xs text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">Ви</span>
+                      )}
+                    </p>
+                    {ownerEmail && <p className="text-xs text-slate-400">{ownerEmail}</p>}
+                  </div>
+                </div>
+              </td>
+              <td className="px-4 py-3">
+                <span className="inline-flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-full bg-amber-100 text-amber-700">
+                  <Crown size={10} /> Власник
+                </span>
+              </td>
+              <td className="px-4 py-3 text-xs text-slate-400">—</td>
+              {canManage && <td className="px-4 py-3" />}
+            </tr>
+
+            {/* Member rows */}
             {members.map((m) => {
               const isMe = m.user_id === currentUser?.id;
-              const isMemberAdmin = m.role === 'admin';
               const displayName = m.user?.username ?? m.user_id;
               return (
                 <tr key={m.user_id} className="border-b border-slate-50 last:border-0">
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-xs font-bold uppercase">
-                        {displayName[0]}
+                        {String(displayName)[0]}
                       </div>
                       <div>
                         <p className="font-medium text-slate-800 flex items-center gap-1.5">
@@ -134,7 +167,7 @@ export default function MembersPage() {
                         onChange={(e) =>
                           updateRole.mutate({ userId: m.user_id, role: e.target.value as MemberRole })
                         }
-                        className="rounded-lg border border-slate-200 px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                        className="rounded-lg border border-slate-200 px-2 py-1 text-xs focus:outline-none focus:border-slate-400 bg-white"
                       >
                         {ROLE_OPTIONS.map((o) => (
                           <option key={o.value} value={o.value}>{o.label}</option>

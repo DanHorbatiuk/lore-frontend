@@ -46,6 +46,7 @@ export default function LoginPage() {
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <Input
               label="Email"
+              labelClassName="text-slate-200"
               type="email"
               placeholder="you@example.com"
               error={errors.email?.message}
@@ -53,6 +54,7 @@ export default function LoginPage() {
             />
             <Input
               label="Пароль"
+              labelClassName="text-slate-200"
               type="password"
               placeholder="••••••••"
               error={errors.password?.message}
