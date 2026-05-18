@@ -46,6 +46,7 @@ export default function LoginPage() {
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <Input
               label="Email"
+              labelClassName="text-slate-200"
               type="email"
               placeholder="you@example.com"
               error={errors.email?.message}
@@ -53,20 +54,17 @@ export default function LoginPage() {
             />
             <Input
               label="Пароль"
+              labelClassName="text-slate-200"
               type="password"
               placeholder="••••••••"
               error={errors.password?.message}
               {...register('password')}
             />
-            <Button type="submit" className="w-full justify-center mt-2" isLoading={isSubmitting}>
-              Увійти
-            </Button>
+            <Button type="submit" className="w-full justify-center mt-2" isLoading={isSubmitting}>Увійти</Button>
           </form>
           <p className="mt-5 text-center text-sm text-slate-500">
             Немає акаунту?{' '}
-            <Link to="/register" className="text-blue-400 hover:text-blue-300 font-medium transition-colors">
-              Зареєструватись
-            </Link>
+            <Link to="/register" className="text-blue-400 hover:text-blue-300 font-medium transition-colors">Зареєструватись</Link>
           </p>
         </div>
       </div>

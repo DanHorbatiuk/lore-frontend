@@ -32,22 +32,12 @@ export function Sidebar() {
         {worldId && (
           <>
             <div className="pt-2 pb-1">
-              <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3">
-                Поточний світ
-              </p>
+              <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider px-3">Поточний світ</p>
             </div>
-            <NavLink to={`/worlds/${worldId}`} end className={linkClass}>
-              <BookOpen size={16} /> Entities
-            </NavLink>
-            <NavLink to={`/worlds/${worldId}/graph`} className={linkClass}>
-              <Network size={16} /> Граф
-            </NavLink>
-            <NavLink to={`/worlds/${worldId}/members`} className={linkClass}>
-              <Users size={16} /> Члени
-            </NavLink>
-            <NavLink to={`/worlds/${worldId}/stats`} className={linkClass}>
-              <BarChart2 size={16} /> Аналітика
-            </NavLink>
+            <NavLink to={`/worlds/${worldId}`} end className={linkClass}><BookOpen size={16} /> Entities</NavLink>
+            <NavLink to={`/worlds/${worldId}/graph`} className={linkClass}><Network size={16} /> Граф</NavLink>
+            <NavLink to={`/worlds/${worldId}/members`} className={linkClass}><Users size={16} /> Члени</NavLink>
+            <NavLink to={`/worlds/${worldId}/stats`} className={linkClass}><BarChart2 size={16} /> Аналітика</NavLink>
           </>
         )}
       </nav>

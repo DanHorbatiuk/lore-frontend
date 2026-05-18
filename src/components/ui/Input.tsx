@@ -4,14 +4,19 @@ import type { InputHTMLAttributes, TextareaHTMLAttributes } from 'react';
 
 interface FieldWrapperProps {
   label?: string;
+  labelClassName?: string;
   error?: string;
   children: React.ReactNode;
 }
 
-export function FieldWrapper({ label, error, children }: FieldWrapperProps) {
+export function FieldWrapper({ label, labelClassName, error, children }: FieldWrapperProps) {
   return (
     <div className="flex flex-col gap-1">
-      {label && <label className="block text-sm font-medium text-slate-700">{label}</label>}
+      {label && (
+        <label className={cn('block text-sm font-medium text-slate-700', labelClassName)}>
+          {label}
+        </label>
+      )}
       {children}
       {error && <p className="text-xs text-red-500">{error}</p>}
     </div>
@@ -20,12 +25,13 @@ export function FieldWrapper({ label, error, children }: FieldWrapperProps) {
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
+  labelClassName?: string;
   error?: string;
 }
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ label, error, className, ...props }, ref) => (
-    <FieldWrapper label={label} error={error}>
+  ({ label, labelClassName, error, className, ...props }, ref) => (
+    <FieldWrapper label={label} labelClassName={labelClassName} error={error}>
       <input
         ref={ref}
         {...props}
@@ -42,12 +48,13 @@ Input.displayName = 'Input';
 
 interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   label?: string;
+  labelClassName?: string;
   error?: string;
 }
 
 export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
-  ({ label, error, className, ...props }, ref) => (
-    <FieldWrapper label={label} error={error}>
+  ({ label, labelClassName, error, className, ...props }, ref) => (
+    <FieldWrapper label={label} labelClassName={labelClassName} error={error}>
       <textarea
         ref={ref}
         {...props}
@@ -64,13 +71,14 @@ Textarea.displayName = 'Textarea';
 
 interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   label?: string;
+  labelClassName?: string;
   error?: string;
   options: { value: string; label: string }[];
 }
 
 export const Select = forwardRef<HTMLSelectElement, SelectProps>(
-  ({ label, error, options, className, ...props }, ref) => (
-    <FieldWrapper label={label} error={error}>
+  ({ label, labelClassName, error, options, className, ...props }, ref) => (
+    <FieldWrapper label={label} labelClassName={labelClassName} error={error}>
       <select
         ref={ref}
         {...props}
