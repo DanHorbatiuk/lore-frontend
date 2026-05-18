@@ -1,37 +1,16 @@
 import { NavLink, Outlet, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { worldsApi } from '@/api/worlds';
-import { membersApi } from '@/api/members';
-import { useAuthStore } from '@/store/authStore';
 import { cn } from '@/utils/cn';
 import type { World } from '@/types';
 
-export type WorldOutletContext = {
-  world: World | undefined;
-  userRole: 'owner' | 'admin' | 'editor' | 'viewer';
-};
-
 export default function WorldDetailPage() {
   const { worldId } = useParams<{ worldId: string }>();
-  const currentUser = useAuthStore((s) => s.user);
-
   const { data: world } = useQuery({
     queryKey: ['worlds', worldId],
     queryFn: () => worldsApi.get(worldId!),
     enabled: !!worldId,
   });
-
-  const { data: members = [] } = useQuery({
-    queryKey: ['members', worldId],
-    queryFn: () => membersApi.list(worldId!),
-    enabled: !!worldId,
-  });
-
-  const isOwner = world?.owner_id === currentUser?.id;
-  const currentMember = members.find((m) => m.user_id === currentUser?.id);
-  const userRole: WorldOutletContext['userRole'] = isOwner
-    ? 'owner'
-    : ((currentMember?.role as 'admin' | 'editor' | 'viewer') ?? 'viewer');
 
   const tabClass = ({ isActive }: { isActive: boolean }) =>
     cn(
@@ -56,7 +35,7 @@ export default function WorldDetailPage() {
         <NavLink to={`/worlds/${worldId}/stats`} className={tabClass}>Аналітика</NavLink>
       </nav>
       <div className="flex-1 overflow-y-auto">
-        <Outlet context={{ world, userRole } satisfies WorldOutletContext} />
+        <Outlet context={{ world } satisfies { world: World | undefined }} />
       </div>
     </div>
   );
