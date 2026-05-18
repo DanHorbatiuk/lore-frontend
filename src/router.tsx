@@ -1,6 +1,7 @@
 import { createBrowserRouter, createRoutesFromElements, Route } from 'react-router-dom';
 import LoginPage from '@/pages/LoginPage';
 import RegisterPage from '@/pages/RegisterPage';
+import LandingPage from '@/pages/LandingPage';
 import WorldsPage from '@/pages/WorldsPage';
 import WorldDetailPage from '@/pages/WorldDetailPage';
 import EntitiesPage from '@/pages/EntitiesPage';
@@ -15,11 +16,12 @@ import { AppShell } from '@/components/layout/AppShell';
 export const router = createBrowserRouter(
   createRoutesFromElements(
     <>
+      <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route element={<RequireAuth />}>
         <Route element={<AppShell />}>
-          <Route path="/" element={<WorldsPage />} />
+          <Route path="/worlds" element={<WorldsPage />} />
           <Route path="/worlds/:worldId" element={<WorldDetailPage />}>
             <Route index element={<EntitiesPage />} />
             <Route path="graph" element={<GraphPage />} />

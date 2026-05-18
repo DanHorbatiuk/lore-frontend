@@ -34,57 +34,62 @@ export default function RegisterPage() {
       await authApi.register({ email, username, password });
       const tokens = await authApi.login({ email, password });
       setTokens(tokens);
-      navigate('/', { replace: true });
+      navigate('/worlds', { replace: true });
     } catch (err) {
       toast.error(getApiError(err));
     }
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-modal max-w-md w-full p-8">
+    <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4">
+      <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-slate-900 tracking-wide">LORE</h1>
-          <p className="text-slate-500 mt-1 text-sm">Створіть свій акаунт</p>
-        </div>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <Input
-            label="Email"
-            type="email"
-            placeholder="you@example.com"
-            error={errors.email?.message}
-            {...register('email')}
-          />
-          <Input
-            label="Ім'я користувача"
-            placeholder="username"
-            error={errors.username?.message}
-            {...register('username')}
-          />
-          <Input
-            label="Пароль"
-            type="password"
-            placeholder="••••••••"
-            error={errors.password?.message}
-            {...register('password')}
-          />
-          <Input
-            label="Підтвердити пароль"
-            type="password"
-            placeholder="••••••••"
-            error={errors.confirmPassword?.message}
-            {...register('confirmPassword')}
-          />
-          <Button type="submit" className="w-full justify-center" isLoading={isSubmitting}>
-            Зареєструватись
-          </Button>
-        </form>
-        <p className="mt-4 text-center text-sm text-slate-500">
-          Вже є акаунт?{' '}
-          <Link to="/login" className="text-blue-600 hover:underline font-medium">
-            Увійти
+          <Link to="/" className="text-4xl font-black tracking-widest text-white hover:text-blue-400 transition-colors">
+            LORE
           </Link>
-        </p>
+          <p className="text-slate-500 mt-2 text-sm">Створіть свій акаунт</p>
+        </div>
+        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8">
+          <h2 className="text-xl font-bold text-white mb-6">Реєстрація</h2>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <Input
+              label="Email"
+              type="email"
+              placeholder="you@example.com"
+              error={errors.email?.message}
+              {...register('email')}
+            />
+            <Input
+              label="Ім'я користувача"
+              placeholder="username"
+              error={errors.username?.message}
+              {...register('username')}
+            />
+            <Input
+              label="Пароль"
+              type="password"
+              placeholder="••••••••"
+              error={errors.password?.message}
+              {...register('password')}
+            />
+            <Input
+              label="Підтвердити пароль"
+              type="password"
+              placeholder="••••••••"
+              error={errors.confirmPassword?.message}
+              {...register('confirmPassword')}
+            />
+            <Button type="submit" className="w-full justify-center mt-2" isLoading={isSubmitting}>
+              Зареєструватись
+            </Button>
+          </form>
+          <p className="mt-5 text-center text-sm text-slate-500">
+            Вже є акаунт?{' '}
+            <Link to="/login" className="text-blue-400 hover:text-blue-300 font-medium transition-colors">
+              Увійти
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );

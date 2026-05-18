@@ -23,10 +23,10 @@ export function Sidebar() {
       )}
     >
       <div className="p-4 border-b border-slate-800">
-        <span className="text-lg font-bold text-white tracking-wide">LORE</span>
+        <span className="text-lg font-bold text-white tracking-widest">LORE</span>
       </div>
       <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
-        <NavLink to="/" end className={linkClass}>
+        <NavLink to="/worlds" end className={linkClass}>
           <Home size={16} /> Мої світи
         </NavLink>
         {worldId && (

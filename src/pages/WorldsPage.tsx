@@ -5,8 +5,9 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import toast from 'react-hot-toast';
-import { Plus, MoreHorizontal, Globe, Lock, Edit, Trash2 } from 'lucide-react';
+import { Plus, MoreHorizontal, Globe, Lock, Edit, Trash2, Crown, Users } from 'lucide-react';
 import { worldsApi } from '@/api/worlds';
+import { useAuthStore } from '@/store/authStore';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
@@ -58,23 +59,45 @@ function WorldFormModal({
   );
 }
 
-function WorldCard({ world, onEdit, onDelete }: { world: World; onEdit: () => void; onDelete: () => void }) {
+function WorldCard({
+  world, currentUserId, onEdit, onDelete,
+}: {
+  world: World;
+  currentUserId: string | undefined;
+  onEdit: () => void;
+  onDelete: () => void;
+}) {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
+  const isOwner = world.owner_id === currentUserId;
 
   return (
     <Card className="relative flex flex-col gap-3" onClick={() => navigate(`/worlds/${world.id}`)}>
       <div className="flex items-start justify-between gap-2">
         <div className="flex-1 min-w-0">
-          <h3 className="font-semibold text-slate-800 truncate">{world.name}</h3>
-          <p className="text-sm text-slate-500 mt-1 line-clamp-2">{world.description ?? 'Без опису'}</p>
+          <div className="flex items-center gap-2 mb-1">
+            <h3 className="font-semibold text-slate-800 truncate">{world.name}</h3>
+            {!isOwner && (
+              <span className="flex items-center gap-1 text-xs text-purple-600 bg-purple-50 px-1.5 py-0.5 rounded-md whitespace-nowrap">
+                <Users size={10} /> Учасник
+              </span>
+            )}
+            {isOwner && (
+              <span className="flex items-center gap-1 text-xs text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded-md whitespace-nowrap">
+                <Crown size={10} /> Власник
+              </span>
+            )}
+          </div>
+          <p className="text-sm text-slate-500 line-clamp-2">{world.description ?? 'Без опису'}</p>
         </div>
-        <button
-          onClick={(e) => { e.stopPropagation(); setMenuOpen((v) => !v); }}
-          className="p-1 rounded-lg hover:bg-slate-100 text-slate-400 flex-shrink-0"
-        >
-          <MoreHorizontal size={16} />
-        </button>
+        {isOwner && (
+          <button
+            onClick={(e) => { e.stopPropagation(); setMenuOpen((v) => !v); }}
+            className="p-1 rounded-lg hover:bg-slate-100 text-slate-400 flex-shrink-0"
+          >
+            <MoreHorizontal size={16} />
+          </button>
+        )}
         {menuOpen && (
           <div
             className="absolute right-4 top-12 bg-white rounded-xl border border-slate-100 shadow-modal z-10 overflow-hidden"
@@ -108,6 +131,7 @@ function WorldCard({ world, onEdit, onDelete }: { world: World; onEdit: () => vo
 
 export default function WorldsPage() {
   const qc = useQueryClient();
+  const currentUser = useAuthStore((s) => s.user);
   const [createOpen, setCreateOpen] = useState(false);
   const [editWorld, setEditWorld] = useState<World | null>(null);
 
@@ -133,6 +157,9 @@ export default function WorldsPage() {
     onSuccess: () => { qc.invalidateQueries({ queryKey: ['worlds'] }); toast.success('Видалено'); },
     onError: (err) => toast.error(getApiError(err)),
   });
+
+  const ownedWorlds = worlds.filter((w) => w.owner_id === currentUser?.id);
+  const memberWorlds = worlds.filter((w) => w.owner_id !== currentUser?.id);
 
   return (
     <>
@@ -161,17 +188,49 @@ export default function WorldsPage() {
           </Button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {worlds.map((w) => (
-            <WorldCard
-              key={w.id}
-              world={w}
-              onEdit={() => setEditWorld(w)}
-              onDelete={() => {
-                if (confirm(`Видалити світ "${w.name}"?`)) deleteMutation.mutate(w.id);
-              }}
-            />
-          ))}
+        <div className="space-y-8">
+          {ownedWorlds.length > 0 && (
+            <div>
+              {memberWorlds.length > 0 && (
+                <h2 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-3 flex items-center gap-2">
+                  <Crown size={13} /> Мої проєкти
+                </h2>
+              )}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {ownedWorlds.map((w) => (
+                  <WorldCard
+                    key={w.id}
+                    world={w}
+                    currentUserId={currentUser?.id}
+                    onEdit={() => setEditWorld(w)}
+                    onDelete={() => {
+                      if (confirm(`Видалити світ "${w.name}"?`)) deleteMutation.mutate(w.id);
+                    }}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+          {memberWorlds.length > 0 && (
+            <div>
+              <h2 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-3 flex items-center gap-2">
+                <Users size={13} /> Запрошені світи
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {memberWorlds.map((w) => (
+                  <WorldCard
+                    key={w.id}
+                    world={w}
+                    currentUserId={currentUser?.id}
+                    onEdit={() => setEditWorld(w)}
+                    onDelete={() => {
+                      if (confirm(`Видалити світ "${w.name}"?`)) deleteMutation.mutate(w.id);
+                    }}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       )}
 
