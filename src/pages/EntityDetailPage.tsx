@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import toast from 'react-hot-toast';
 import { Clock, ArrowLeft, Network, Upload, Plus, Edit, Trash2, Lock, Unlock } from 'lucide-react';
-import { entitiesApi } from '@/api/entities';
+import { entitiesApi, resolveImageUrl } from '@/api/entities';
 import { notesApi } from '@/api/notes';
 import { graphApi } from '@/api/graph';
 import { Badge } from '@/components/ui/Badge';
@@ -80,7 +80,7 @@ export default function EntityDetailPage() {
       </Link>
 
       {entity.image_url ? (
-        <img src={entity.image_url} alt={entity.name} className="w-full max-h-48 object-cover rounded-xl mb-4" />
+        <img src={resolveImageUrl(entity.image_url)!} alt={entity.name} className="w-full max-h-48 object-cover rounded-xl mb-4" />
       ) : (
         <div className="w-full h-20 bg-slate-100 rounded-xl mb-4 flex items-center justify-center">
           <Button variant="ghost" size="sm" onClick={() => fileInputRef.current?.click()}>

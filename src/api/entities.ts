@@ -1,6 +1,13 @@
 import { api } from './client';
 import type { Entity, EntityCreate, EntityUpdate } from '@/types';
 
+export function resolveImageUrl(url: string | null | undefined): string | null {
+  if (!url) return null;
+  if (url.startsWith('http://') || url.startsWith('https://')) return url;
+  const base = (import.meta.env.VITE_API_URL ?? 'http://localhost:8000').replace(/\/$/, '');
+  return base + (url.startsWith('/') ? url : '/' + url);
+}
+
 export const entitiesApi = {
   list: (worldId: string) =>
     api.get<Entity[]>(`/worlds/${worldId}/entities`).then((r) => r.data),

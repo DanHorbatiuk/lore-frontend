@@ -1,14 +1,30 @@
 import { Link } from 'react-router-dom';
 import { useAuthStore } from '@/store/authStore';
 import { Navigate } from 'react-router-dom';
-import { BookOpen, Network, Users, BarChart2, Globe, Scroll, Sparkles } from 'lucide-react';
+import { BookOpen, Network, Users, BarChart2, Globe, Scroll, Sparkles, Swords, Map, Star, Feather, Flame, Shield, Crown, Compass } from 'lucide-react';
 
 export default function LandingPage() {
   const accessToken = useAuthStore((s) => s.accessToken);
   if (accessToken) return <Navigate to="/worlds" replace />;
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white overflow-x-hidden">
+    <div className="min-h-screen bg-slate-950 text-white overflow-x-hidden relative">
+      {/* Floating background icons */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden -z-10" aria-hidden>
+        <Swords size={28} className="absolute top-[8%] left-[6%] text-blue-800/25 rotate-12" />
+        <Map size={22} className="absolute top-[15%] right-[8%] text-indigo-700/20 -rotate-6" />
+        <Star size={16} className="absolute top-[25%] left-[18%] text-amber-700/25 rotate-45" />
+        <Feather size={24} className="absolute top-[35%] right-[14%] text-purple-700/20 rotate-12" />
+        <Flame size={20} className="absolute top-[55%] left-[5%] text-red-800/20 -rotate-12" />
+        <Shield size={26} className="absolute top-[60%] right-[6%] text-blue-800/20 rotate-6" />
+        <Crown size={20} className="absolute top-[72%] left-[12%] text-amber-700/20 rotate-3" />
+        <Compass size={22} className="absolute top-[80%] right-[16%] text-emerald-700/20 -rotate-15" />
+        <BookOpen size={18} className="absolute top-[45%] left-[88%] text-slate-600/30 rotate-6" />
+        <Scroll size={16} className="absolute top-[20%] left-[48%] text-slate-600/20 -rotate-3" />
+        <Star size={12} className="absolute top-[88%] left-[40%] text-amber-700/15 rotate-12" />
+        <Sparkles size={14} className="absolute top-[5%] left-[35%] text-blue-700/20" />
+      </div>
+
       {/* Nav */}
       <nav className="flex items-center justify-between px-6 py-4 max-w-6xl mx-auto">
         <span className="text-xl font-bold tracking-widest text-white">LORE</span>

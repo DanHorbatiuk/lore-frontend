@@ -103,9 +103,48 @@ export default function MembersPage() {
             </tr>
           </thead>
           <tbody>
-            {members.map((m) => {
+            {/* Owner row */}
+            {(() => {
+              const ownerMember = members.find((m) => m.user_id === world?.owner_id);
+              const ownerIsCurrentUser = world?.owner_id === currentUser?.id;
+              const ownerName = ownerMember?.user?.username
+                ?? (ownerIsCurrentUser ? currentUser?.username : null)
+                ?? world?.owner_id?.slice(0, 8) + '…';
+              const ownerEmail = ownerMember?.user?.email
+                ?? (ownerIsCurrentUser ? currentUser?.email : undefined);
+              if (!world?.owner_id) return null;
+              return (
+                <tr className="border-b border-amber-50 bg-amber-50/40">
+                  <td className="px-4 py-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 text-xs font-bold uppercase">
+                        {ownerName[0]}
+                      </div>
+                      <div>
+                        <p className="font-medium text-slate-800 flex items-center gap-1.5">
+                          {ownerName}
+                          {ownerIsCurrentUser && (
+                            <span className="text-xs text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">Ви</span>
+                          )}
+                        </p>
+                        {ownerEmail && <p className="text-xs text-slate-400">{ownerEmail}</p>}
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-4 py-3">
+                    <span className="inline-flex items-center gap-1 text-xs font-medium text-amber-700 bg-amber-100 px-2 py-0.5 rounded-full">
+                      <Crown size={11} /> Власник
+                    </span>
+                  </td>
+                  <td className="px-4 py-3 text-xs text-slate-400">—</td>
+                  {canManage && <td className="px-4 py-3" />}
+                </tr>
+              );
+            })()}
+            {members
+              .filter((m) => m.user_id !== world?.owner_id)
+              .map((m) => {
               const isMe = m.user_id === currentUser?.id;
-              const isMemberAdmin = m.role === 'admin';
               const displayName = m.user?.username ?? m.user_id;
               return (
                 <tr key={m.user_id} className="border-b border-slate-50 last:border-0">
