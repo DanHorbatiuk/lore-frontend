@@ -3,9 +3,14 @@ import type { Entity, EntityCreate, EntityUpdate } from '@/types';
 
 export function resolveImageUrl(url: string | null | undefined): string | null {
   if (!url) return null;
-  if (url.startsWith('http://') || url.startsWith('https://')) return url;
+  if (url.startsWith('http://') || url.startsWith('https://')) {
+    return url
+      .replace('http://minio:9000', 'http://localhost:9000')
+      .replace('https://minio:9000', 'http://localhost:9000');
+  }
   const base = (import.meta.env.VITE_API_URL ?? 'http://localhost:8000').replace(/\/$/, '');
-  return base + (url.startsWith('/') ? url : '/' + url);
+  const full = base + (url.startsWith('/') ? url : '/' + url);
+  return full.replace('http://minio:9000', 'http://localhost:9000');
 }
 
 export const entitiesApi = {
@@ -29,7 +34,7 @@ export const entitiesApi = {
     const fd = new FormData();
     fd.append('file', file);
     return api
-      .post<Entity>(`/worlds/${worldId}/entities/${id}/upload-image`, fd, {
+      .post<{ image_url: string }>(`/worlds/${worldId}/entities/${id}/upload-image`, fd, {
         headers: { 'Content-Type': 'multipart/form-data' },
       })
       .then((r) => r.data);

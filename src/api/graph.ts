@@ -1,5 +1,5 @@
 import { api } from './client';
-import type { GraphData, Edge, EdgeCreate, Entity } from '@/types';
+import type { GraphData, Edge, EdgeCreate, Entity, ConflictItem } from '@/types';
 
 export const graphApi = {
   get: (worldId: string) =>
@@ -10,12 +10,14 @@ export const graphApi = {
     api.delete(`/worlds/${worldId}/graph/edges/${edgeId}`),
   neighbors: (worldId: string, entityId: string, depth = 1) =>
     api
-      .get<Entity[]>(`/worlds/${worldId}/graph/neighbors/${entityId}`, { params: { depth } })
-      .then((r) => r.data),
+      .get<{ nodes: Entity[]; edges: Edge[] }>(`/worlds/${worldId}/graph/neighbors/${entityId}`, { params: { depth } })
+      .then((r) => r.data.nodes),
   path: (worldId: string, from: string, to: string) =>
     api
       .get<Entity[]>(`/worlds/${worldId}/graph/path`, { params: { from_id: from, to_id: to } })
       .then((r) => r.data),
   conflicts: (worldId: string) =>
-    api.get<{ conflicts: string[] }>(`/worlds/${worldId}/graph/conflicts`).then((r) => r.data),
+    api
+      .get<{ has_conflicts: boolean; conflicts: ConflictItem[] }>(`/worlds/${worldId}/graph/conflicts`)
+      .then((r) => r.data),
 };

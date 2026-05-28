@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import toast from 'react-hot-toast';
-import { Clock, ArrowLeft, Network, Upload, Plus, Edit, Trash2, Lock, Unlock } from 'lucide-react';
+import { Clock, ArrowLeft, Network, Upload, Plus, Edit, Trash2, Lock, Unlock, BookOpen } from 'lucide-react';
 import { entitiesApi, resolveImageUrl } from '@/api/entities';
 import { notesApi } from '@/api/notes';
 import { graphApi } from '@/api/graph';
@@ -16,7 +16,7 @@ import { Textarea } from '@/components/ui/Input';
 import { getApiError } from '@/utils/errorHandler';
 import { formatDistanceToNow } from 'date-fns';
 import { uk } from 'date-fns/locale';
-import type { Note } from '@/types';
+import type { Note, Entity } from '@/types';
 
 const noteSchema = z.object({ content: z.string().min(1), is_private: z.boolean().optional() });
 type NoteFormData = z.infer<typeof noteSchema>;
@@ -24,7 +24,6 @@ type NoteFormData = z.infer<typeof noteSchema>;
 export default function EntityDetailPage() {
   const { worldId, entityId } = useParams<{ worldId: string; entityId: string }>();
   const qc = useQueryClient();
-  const [editNoteId, setEditNoteId] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { data: entity, isLoading } = useQuery({
@@ -64,7 +63,12 @@ export default function EntityDetailPage() {
 
   const uploadImage = useMutation({
     mutationFn: (file: File) => entitiesApi.uploadImage(worldId!, entityId!, file),
-    onSuccess: () => { qc.invalidateQueries({ queryKey: ['entities', worldId, entityId] }); toast.success('Зображення завантажено'); },
+    onSuccess: (data) => {
+      qc.setQueryData(['entities', worldId, entityId], (old: Entity | undefined) =>
+        old ? { ...old, image_url: data.image_url } : old
+      );
+      toast.success('Зображення завантажено');
+    },
     onError: (err) => toast.error(getApiError(err)),
   });
 
@@ -103,6 +107,14 @@ export default function EntityDetailPage() {
           <Button variant="ghost" size="sm" onClick={() => fileInputRef.current?.click()}>
             <Upload size={14} />
           </Button>
+        )}
+        {entity.entity_type === 'chapter' && (
+          <Link
+            to={`/worlds/${worldId}/entities/${entity.id}/story`}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg transition-colors"
+          >
+            <BookOpen size={14} /> Редагувати історію
+          </Link>
         )}
       </div>
 
