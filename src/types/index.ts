@@ -81,6 +81,12 @@ export interface WorldStats {
   most_connected: string | null;
 }
 
+export interface ConflictItem {
+  type: string;
+  description: string;
+  data: Record<string, unknown>;
+}
+
 export type WorldCreate = { name: string; description?: string; is_public?: boolean };
 export type WorldUpdate = Partial<WorldCreate>;
 

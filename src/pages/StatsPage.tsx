@@ -7,6 +7,7 @@ import { PageHeader } from '@/components/layout/PageHeader';
 import { Card } from '@/components/ui/Card';
 import { formatDistanceToNow } from 'date-fns';
 import { uk } from 'date-fns/locale';
+import type { ConflictItem } from '@/types';
 
 const ENTITY_TYPE_LABELS: Record<string, string> = {
   character: 'Персонажі', location: 'Локації', event: 'Події',
@@ -58,7 +59,7 @@ export default function StatsPage() {
   if (!stats) return null;
 
   const maxCount = Math.max(...(stats.entities_by_type?.map((e) => e.count) ?? [1]), 1);
-  const conflicts = conflictsData?.conflicts ?? [];
+  const conflicts: ConflictItem[] = conflictsData?.conflicts ?? [];
 
   return (
     <>

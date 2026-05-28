@@ -18,7 +18,7 @@ import { Select } from '@/components/ui/Input';
 import { Badge } from '@/components/ui/Badge';
 import { getApiError } from '@/utils/errorHandler';
 import { ENTITY_TYPE_COLORS } from '@/utils/constants';
-import type { Entity, Edge, EdgeCreate, EntityType } from '@/types';
+import type { Entity, Edge, EdgeCreate, EntityType, ConflictItem } from '@/types';
 
 const edgeSchema = z.object({
   from_entity_id: z.string().min(1),
@@ -45,7 +45,7 @@ export default function GraphPage() {
   const [pathModalOpen, setPathModalOpen] = useState(false);
   const [conflictsOpen, setConflictsOpen] = useState(false);
   const [pathResult, setPathResult] = useState<Entity[]>([]);
-  const [conflicts, setConflicts] = useState<string[]>([]);
+  const [conflicts, setConflicts] = useState<ConflictItem[]>([]);
 
   const { data: graphData } = useQuery({
     queryKey: ['graph', worldId],
@@ -305,7 +305,9 @@ export default function GraphPage() {
           </div>
           <p className="text-sm font-semibold text-slate-800 mb-1">{selectedEdge.label}</p>
           <p className="text-xs text-slate-400 mb-3">
-            {selectedEdge.from_entity_id} → {selectedEdge.to_entity_id}
+            {entities.find((e) => e.id === selectedEdge.from_entity_id)?.name ?? selectedEdge.from_entity_id}
+            {' → '}
+            {entities.find((e) => e.id === selectedEdge.to_entity_id)?.name ?? selectedEdge.to_entity_id}
           </p>
           <Button
             size="sm"
@@ -406,7 +408,9 @@ export default function GraphPage() {
             {conflicts.map((c, i) => (
               <li key={i} className="flex items-start gap-2 text-sm text-amber-800 bg-amber-50 px-3 py-2 rounded-lg">
                 <AlertTriangle size={14} className="flex-shrink-0 mt-0.5 text-amber-600" />
-                {c}
+                <div>
+                  <span className="font-medium capitalize">{c.type}</span>: {c.description}
+                </div>
               </li>
             ))}
           </ul>

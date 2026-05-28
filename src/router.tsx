@@ -9,6 +9,7 @@ import GraphPage from '@/pages/GraphPage';
 import MembersPage from '@/pages/MembersPage';
 import StatsPage from '@/pages/StatsPage';
 import EntityDetailPage from '@/pages/EntityDetailPage';
+import ChapterStoryPage from '@/pages/ChapterStoryPage';
 import NotFoundPage from '@/pages/NotFoundPage';
 import { RequireAuth } from '@/components/layout/RequireAuth';
 import { AppShell } from '@/components/layout/AppShell';
@@ -29,6 +30,7 @@ export const router = createBrowserRouter(
             <Route path="stats" element={<StatsPage />} />
           </Route>
           <Route path="/worlds/:worldId/entities/:entityId" element={<EntityDetailPage />} />
+          <Route path="/worlds/:worldId/entities/:entityId/story" element={<ChapterStoryPage />} />
         </Route>
       </Route>
       <Route path="*" element={<NotFoundPage />} />
